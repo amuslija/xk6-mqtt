@@ -153,7 +153,7 @@ func (c *client) loop(messageChan <-chan paho.Message, timeout uint) {
 
 // AddEventListener expose the js method to listen for events
 func (c *client) AddEventListener(event string, listener func(goja.Value) (goja.Value, error)) {
-	println("adding listener for", event)
+	println("adding listener for", event, listener)
 	switch event {
 	case "message":
 		c.messageListener = listener
