@@ -33,6 +33,10 @@ func (c *client) Subscribe(
 		}(msg)
 	}
 	token := c.pahoClient.Subscribe(topic, byte(qos), messageCB)
+	println("subscribed to", topic)
+	c.pahoClient.Subscribe(topic, byte(qos), func(c paho.Client, m paho.Message) {
+		println("message received", string(m.Payload()))
+	})
 	if !token.WaitTimeout(time.Duration(timeout) * time.Millisecond) {
 		common.Throw(rt, ErrTimeout)
 		return ErrTimeout
