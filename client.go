@@ -236,8 +236,8 @@ func (c *client) Connect() error {
 		opts.AddBroker(c.conf.servers[i])
 	}
 	opts.SetClientID(c.conf.clientid)
-	opts.SetUsername(c.conf.user)
-	opts.SetPassword(c.conf.password)
+	// opts.SetUsername(c.conf.user)
+	// opts.SetPassword(c.conf.password)
 	opts.SetCleanSession(c.conf.cleansess)
 	client := paho.NewClient(opts)
 	token := client.Connect()
