@@ -199,7 +199,7 @@ func TestTimeout(t *testing.T) {
 		_, err := ts.rt.RunString(str)
 		return err
 	})
-	require.Error(t, err, "operation timeout at github.com/pmalhaire/xk6-mqtt.(*client).Connect-fm (native)")
+	require.Error(t, err, "operation timeout at github.com/amuslija/xk6-mqtt.(*client).Connect-fm (native)")
 }
 
 func TestSubscribeNoPublish(t *testing.T) {
