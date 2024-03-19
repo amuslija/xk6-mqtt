@@ -234,7 +234,7 @@ func (c *client) Connect() error {
 		opts.AddBroker(fmt.Sprintf("tcps://%s:8883/mqtt", c.conf.servers[i]))
 	}
 	opts.SetClientID(c.conf.clientid)
-
+	println("test")
 	client := paho.NewClient(opts)
 	token := client.Connect()
 	rt := c.vu.Runtime()
