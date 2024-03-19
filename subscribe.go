@@ -27,16 +27,13 @@ func (c *client) Subscribe(
 	}
 	c.messageChan = make(chan paho.Message)
 	messageCB := func(client paho.Client, msg paho.Message) {
-		println("message received", string(msg.Payload()))
+
 		go func(msg paho.Message) {
 			c.messageChan <- msg
 		}(msg)
 	}
 	token := c.pahoClient.Subscribe(topic, byte(qos), messageCB)
-	println("subscribed to", topic)
-	// c.pahoClient.Subscribe(topic, byte(qos), func(c paho.Client, m paho.Message) {
-	// 	println("rec", string(m.Payload()))
-	// })
+
 	if !token.WaitTimeout(time.Duration(timeout) * time.Millisecond) {
 		common.Throw(rt, ErrTimeout)
 		return ErrTimeout
@@ -89,7 +86,7 @@ func (c *client) loop(messageChan <-chan paho.Message, timeout uint) {
 	for {
 		select {
 		case msg, ok := <-messageChan:
-			println(msg, ok, "hello")
+
 			if !ok {
 				// wanted exit in case of chan close
 				return
@@ -103,9 +100,9 @@ func (c *client) loop(messageChan <-chan paho.Message, timeout uint) {
 					return err
 				}
 				// TODO authorize multiple listeners
-				println(c.messageListener, "log message listener")
+
 				if c.messageListener != nil {
-					println("message listener attached")
+
 					if _, err := c.messageListener(ev); err != nil {
 						return err
 					}
@@ -155,7 +152,6 @@ func (c *client) loop(messageChan <-chan paho.Message, timeout uint) {
 
 // AddEventListener expose the js method to listen for events
 func (c *client) AddEventListener(event string, listener func(goja.Value) (goja.Value, error)) {
-	println("adding listener for", event, listener)
 	switch event {
 	case "message":
 		c.messageListener = listener
