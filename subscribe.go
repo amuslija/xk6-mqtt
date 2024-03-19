@@ -103,7 +103,7 @@ func (c *client) loop(messageChan <-chan paho.Message, timeout uint) {
 				}
 				// TODO authorize multiple listeners
 				if c.messageListener != nil {
-
+					println("message listener attached")
 					if _, err := c.messageListener(ev); err != nil {
 						return err
 					}
