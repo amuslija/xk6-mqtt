@@ -27,8 +27,8 @@ func (c *client) Subscribe(
 	}
 	c.messageChan = make(chan paho.Message)
 	messageCB := func(client paho.Client, msg paho.Message) {
+		println("message received", string(msg.Payload()))
 		go func(msg paho.Message) {
-			println("message received", string(msg.Payload()))
 			c.messageChan <- msg
 		}(msg)
 	}
@@ -89,6 +89,7 @@ func (c *client) loop(messageChan <-chan paho.Message, timeout uint) {
 	for {
 		select {
 		case msg, ok := <-messageChan:
+			println(msg, ok, "hello")
 			if !ok {
 				// wanted exit in case of chan close
 				return
