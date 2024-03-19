@@ -210,8 +210,7 @@ func (c *client) Connect() error {
 			panic("failed to parse root certificate")
 		}
 		tlsConfig = &tls.Config{
-			RootCAs:    rootCA,
-			MinVersion: tls.VersionTLS13,
+			RootCAs: rootCA,
 		}
 	}
 	// Use local cert if specified
@@ -225,7 +224,6 @@ func (c *client) Connect() error {
 		} else {
 			tlsConfig = &tls.Config{
 				Certificates: []tls.Certificate{cert},
-				MinVersion:   tls.VersionTLS13,
 			}
 		}
 	}
@@ -233,12 +231,10 @@ func (c *client) Connect() error {
 		opts.SetTLSConfig(tlsConfig)
 	}
 	for i := range c.conf.servers {
-		opts.AddBroker(c.conf.servers[i])
+		opts.AddBroker(fmt.Sprintf("tcps://%s:8883/mqtt", c.conf.servers[i]))
 	}
 	opts.SetClientID(c.conf.clientid)
-	opts.SetUsername(c.conf.user)
-	opts.SetPassword(c.conf.password)
-	opts.SetCleanSession(c.conf.cleansess)
+
 	client := paho.NewClient(opts)
 	token := client.Connect()
 	rt := c.vu.Runtime()
@@ -247,7 +243,7 @@ func (c *client) Connect() error {
 		return ErrTimeout
 	}
 	if token.Error() != nil {
-		common.Throw(rt, token.Error())
+		common.Throw(rt, errors.New("ado"))
 		return token.Error()
 	}
 	c.pahoClient = client
