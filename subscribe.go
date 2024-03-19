@@ -28,6 +28,7 @@ func (c *client) Subscribe(
 	c.messageChan = make(chan paho.Message)
 	messageCB := func(client paho.Client, msg paho.Message) {
 		go func(msg paho.Message) {
+			println("message received", string(msg.Payload()))
 			c.messageChan <- msg
 		}(msg)
 	}
@@ -98,6 +99,7 @@ func (c *client) loop(messageChan <-chan paho.Message, timeout uint) {
 				}
 				// TODO authorize multiple listeners
 				if c.messageListener != nil {
+
 					if _, err := c.messageListener(ev); err != nil {
 						return err
 					}
